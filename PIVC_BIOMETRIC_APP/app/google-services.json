@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "196406163890",
+    "project_id": "pivc-biometric-app",
+    "storage_bucket": "pivc-biometric-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196406163890:android:8589cb458487329d2c8cab",
+        "android_client_info": {
+          "package_name": "com.aps.pivc_biometric_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp5R335G-VsasC02yheCrmysKXXpp6F9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
