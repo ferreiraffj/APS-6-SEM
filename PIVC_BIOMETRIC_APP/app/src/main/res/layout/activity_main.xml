@@ -53,5 +53,17 @@
         app:layout_constraintBottom_toTopOf="@+id/btnlogin"
         tools:layout_editor_absoluteX="0dp" />
 
+    <TextView
+        android:id="@+id/registerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/regText"
+        android:textColor="@android:color/holo_blue_dark"
+        app:layout_constraintTop_toBottomOf="@+id/btnlogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

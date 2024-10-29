@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser mUser;
     ProgressDialog progressDialog;
     SharedPreferences sharedPreferences;
+    TextView registerText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         mUser=mAuth.getCurrentUser();
         progressDialog=new ProgressDialog(this);
+        registerText=findViewById(R.id.registerText);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,9 +78,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        registerText.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
         sharedPreferences=getSharedPreferences("data", MODE_PRIVATE);
         boolean isLogin=sharedPreferences.getBoolean("isLogin", false);
-        if (isLogin){
+        if (!isLogin){
+            imageViewLogin.setVisibility(View.GONE);
+        } else {
             imageViewLogin.setVisibility(View.VISIBLE);
         }
 
@@ -141,6 +151,13 @@ public class MainActivity extends AppCompatActivity {
         imageViewLogin.setOnClickListener(view -> {
             biometricPrompt.authenticate(promptInfo);
         });
+
+        String savedEmail = sharedPreferences.getString("email", "");
+        if (!savedEmail.isEmpty()) {
+            inputEmail.setText(savedEmail);  // Preenche automaticamente o e-mail
+        }
+
+
     }
 
     private void PeformAuth(String email, String password) {
@@ -155,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("password", password);
                     editor.putString("isLogin", String.valueOf(true));
                     editor.apply();
+
+                    imageViewLogin.setVisibility(View.VISIBLE);
+
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));
 
                     progressDialog.dismiss();

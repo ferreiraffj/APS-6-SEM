@@ -3,8 +3,12 @@
     <string name="login_using_fingerprint">Entrar com a impressão digital</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="home">Home</string>
-<!--    <string name="btn_exit">Sair</string>-->
+    <!--    <string name="btn_exit">Sair</string>-->
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="senha">Senha</string>
+    <string name="regEmail">Email</string>
+    <string name="regPassword">Senha</string>
+    <string name="btnRegister">Registrar</string>
+    <string name="regText">Não tem conta? Registre-se aqui.</string>
 </resources>
