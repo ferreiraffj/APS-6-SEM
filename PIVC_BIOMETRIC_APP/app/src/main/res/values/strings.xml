@@ -11,6 +11,7 @@
     <string name="regPassword">Senha</string>
     <string name="btnRegister">Registrar</string>
     <string name="regText">Não tem conta? Registre-se aqui.</string>
-    <string name="digite_o_e_mail_para_busca">Digite o e-mail para busca</string>
-    <string name="buscarUsuario">Buscar</string>
+    <string name="digite_o_e_mail_do_usuario">Digite o e-mail do usuário</string>
+    <string name="buscar">Buscar</string>
+    <string name="btnUsers">Usuários</string>
 </resources>

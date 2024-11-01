@@ -1,7 +1,9 @@
 package com.aps.pivc_biometric_app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -13,7 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 public class HomeActivity extends AppCompatActivity {
 
 //    Button btn_exit;
+    Button btnUsuarios;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +27,13 @@ public class HomeActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        btnUsuarios = findViewById(R.id.btnUsuarios);
+        btnUsuarios.setOnClickListener(view -> {
+            Log.d("HomeActivity", "Botão de usuários clicado");
+            startActivity(new Intent(HomeActivity.this, ManageUserActivity.class));
+            finish();
         });
 
 //        btn_exit=findViewById(R.id.btn_exit);

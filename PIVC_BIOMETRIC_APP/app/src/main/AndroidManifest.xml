@@ -13,6 +13,9 @@
         android:theme="@style/Theme.PIVC_BIOMETRIC_APP"
         tools:targetApi="31">
         <activity
+            android:name=".ManageUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManagerPermissionActivity"
             android:exported="false" />
         <activity
