@@ -1,5 +1,6 @@
 package com.aps.pivc_biometric_app;
 
+import static android.content.ContentValues.TAG;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
@@ -31,6 +32,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.concurrent.Executor;
 
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogin;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     ProgressDialog progressDialog;
     SharedPreferences sharedPreferences;
     TextView registerText;
@@ -172,6 +177,23 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("password", password);
                     editor.putString("isLogin", String.valueOf(true));
                     editor.apply();
+
+                    db.collection("users")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Log.d(TAG, document.getId() + " => " + document.getData());
+                                            Toast.makeText(MainActivity.this, "Permissões recuperadas com sucesso", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Log.w(TAG, "Error getting documents.", task.getException());
+                                        Toast.makeText(MainActivity.this, "Erro ao recuperar permissões", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
 
                     imageViewLogin.setVisibility(View.VISIBLE);
 
