@@ -14,4 +14,6 @@
     <string name="digite_o_e_mail_do_usuario">Digite o e-mail do usuário</string>
     <string name="buscar">Buscar</string>
     <string name="btnUsers">Usuários</string>
+    <string name="changePermissionDialog">Selecione o novo nível de permissão</string>
+    <string name="btnChangePermission">Atualizar Permissão</string>
 </resources>
