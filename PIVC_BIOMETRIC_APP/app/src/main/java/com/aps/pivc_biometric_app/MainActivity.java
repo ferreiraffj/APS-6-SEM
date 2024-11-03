@@ -32,10 +32,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Objects;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
@@ -164,48 +166,65 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
     private void PeformAuth(String email, String password) {
         progressDialog.setMessage("Login");
         progressDialog.show();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    SharedPreferences.Editor editor=getSharedPreferences("data",MODE_PRIVATE).edit();
-                    editor.putString("email", email);
-                    editor.putString("password", password);
-                    editor.putString("isLogin", String.valueOf(true));
-                    editor.apply();
+                if (task.isSuccessful()) {
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    if (currentUser != null) {
+                        String userId = currentUser.getUid();
+                        Log.d(TAG, "Usuário autenticado com ID: " + userId);
 
-                    db.collection("users")
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Log.d(TAG, document.getId() + " => " + document.getData());
-                                            Toast.makeText(MainActivity.this, "Permissões recuperadas com sucesso", Toast.LENGTH_SHORT).show();
+                        db.collection("users")
+                                .document(userId)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful() && task.getResult() != null) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                Long permissionLevel = document.getLong("permissionLevel");
+                                                if (permissionLevel != null) {
+                                                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                                                    editor.putString("email", email);
+                                                    editor.putString("password", password);
+                                                    editor.putInt("permissionLevel", permissionLevel.intValue());
+                                                    editor.putBoolean("isLogin", true);
+                                                    editor.apply();
+
+                                                    Toast.makeText(MainActivity.this,
+                                                            "Nível de permissão: " + permissionLevel,
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                    imageViewLogin.setVisibility(View.VISIBLE);
+                                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                                } else {
+                                                    Log.d(TAG, "Campo 'permissionLevel' ausente no documento.");
+                                                    Toast.makeText(MainActivity.this, "Erro: Campo 'permissionLevel' ausente.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Log.d(TAG, "Documento de usuário não encontrado.");
+                                                Toast.makeText(MainActivity.this, "Usuário não encontrado", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Log.w(TAG, "Erro ao recuperar documento de permissão.", task.getException());
+                                            Toast.makeText(MainActivity.this, "Erro ao recuperar permissões", Toast.LENGTH_SHORT).show();
                                         }
-                                    } else {
-                                        Log.w(TAG, "Error getting documents.", task.getException());
-                                        Toast.makeText(MainActivity.this, "Erro ao recuperar permissões", Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
                                     }
-                                }
-                            });
-
-                    imageViewLogin.setVisibility(View.VISIBLE);
-
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
-
-                    progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show();
+                                });
+                    }
                 } else {
+                    Log.w(TAG, "Erro ao autenticar.", task.getException());
+                    Toast.makeText(MainActivity.this, "Erro ao autenticar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
 }

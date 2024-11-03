@@ -1,6 +1,7 @@
 package com.aps.pivc_biometric_app;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ import java.util.Objects;
 public class ManageUserActivity extends AppCompatActivity {
 
     private EditText editTextEmail;
-    private Button buttonSearch;
+    private Button buttonSearch, btnBackToHome;
     private TextView textViewResult;
     private FirebaseFirestore db;
     private String userEmail;
@@ -43,6 +44,7 @@ public class ManageUserActivity extends AppCompatActivity {
 
         editTextEmail = findViewById(R.id.editTextEmail);
         buttonSearch = findViewById(R.id.buttonSearch);
+        btnBackToHome = findViewById(R.id.btnBackToHome);
         textViewResult = findViewById(R.id.textViewResult);
         db = FirebaseFirestore.getInstance();
 
@@ -59,6 +61,14 @@ public class ManageUserActivity extends AppCompatActivity {
             }
         });
 
+        btnBackToHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ManageUserActivity.this, HomeActivity.class));
+                finish();
+            }
+        });
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -70,8 +80,8 @@ public class ManageUserActivity extends AppCompatActivity {
             return;
         }
 
-        db.collection("users") // Substitua "usuarios" pelo nome da sua coleção
-                .whereEqualTo("email", email) // Substitua "email" pela chave que você usa para armazenar o e-mail
+        db.collection("users") // nome da sua coleção
+                .whereEqualTo("email", email) // chave de armazenamento de e-mail
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -140,30 +150,3 @@ public class ManageUserActivity extends AppCompatActivity {
                 });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

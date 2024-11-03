@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Neutros -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray_100">#FFF5F5F5</color>
+    <color name="gray_200">#FFE0E0E0</color>
+    <color name="gray_300">#FFCCCCCC</color>
+    <color name="gray_400">#FFB3B3B3</color>
+    <color name="gray_500">#FF999999</color>
+    <color name="gray_600">#FF808080</color>
+    <color name="gray_700">#FF666666</color>
+    <color name="gray_800">#FF4D4D4D</color>
+    <color name="gray_900">#FF333333</color>
+
+    <!-- Primários -->
+    <color name="blue_100">#FFBBDEFB</color>
+    <color name="blue_200">#FF90CAF9</color>
+    <color name="blue_300">#FF64B5F6</color>
+    <color name="blue_400">#FF42A5F5</color>
+    <color name="blue_500">#FF2196F3</color>
+    <color name="blue_600">#FF1E88E5</color>
+    <color name="blue_700">#FF1976D2</color>
+    <color name="blue_800">#FF1565C0</color>
+    <color name="blue_900">#FF0D47A1</color>
+
+    <!-- Secundários -->
+    <color name="green_100">#FFC8E6C9</color>
+    <color name="green_200">#FFA5D6A7</color>
+    <color name="green_300">#FF81C784</color>
+    <color name="green_400">#FF66BB6A</color>
+    <color name="green_500">#FF4CAF50</color>
+    <color name="green_600">#FF43A047</color>
+    <color name="green_700">#FF388E3C</color>
+    <color name="green_800">#FF2E7D32</color>
+    <color name="green_900">#FF1B5E20</color>
+
+    <!-- Extras -->
+    <color name="red_500">#FFF44336</color>
+    <color name="yellow_500">#FFFFEB3B</color>
+    <color name="orange_500">#FFFF9800</color>
+    <color name="purple_500">#FF9C27B0</color>
 </resources>

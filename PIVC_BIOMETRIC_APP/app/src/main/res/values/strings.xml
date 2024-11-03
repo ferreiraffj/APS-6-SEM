@@ -16,4 +16,9 @@
     <string name="btnUsers">Usuários</string>
     <string name="changePermissionDialog">Selecione o novo nível de permissão</string>
     <string name="btnChangePermission">Atualizar Permissão</string>
+    <string name="perfilToolbar">Perfil</string>
+    <string name="gerenciarPermissoesToolbar">Gerenciar Permissões</string>
+    <string name="searchtoolbarbutton">searchToolbarButton</string>
+    <string name="voltar_ao_menu">Voltar ao menu</string>
+    <string name="btnSairParaLogin">Sair</string>
 </resources>

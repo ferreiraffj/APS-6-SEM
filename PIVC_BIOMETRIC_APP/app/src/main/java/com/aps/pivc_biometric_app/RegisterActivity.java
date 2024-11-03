@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -68,28 +69,35 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                    editor.putString("email", email);
-                    editor.apply();
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    if(currentUser != null){
+                        String userId = currentUser.getUid();
 
-                    // Criando um novo usuário com email e nível de permissão
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("email", email);
-                    user.put("permissionLevel", 1); //Nível de permissão padrão
+                        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                        editor.putString("email", email);
+                        editor.apply();
 
-                    // Add a new document with a generated ID
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(RegisterActivity.this, "Registro realizado com sucesso", Toast.LENGTH_SHORT).show();
+                        // Criando um novo usuário com email e nível de permissão
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("email", email);
+                        user.put("permissionLevel", 1); //Nível de permissão padrão
 
-                                // Redirecionamento a MainActivity.java
-                                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(RegisterActivity.this, "Erro ao salvar permissão: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
+
+
+                        // Add a new document with a generated ID
+                        db.collection("users").document(userId)
+                                .set(user)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(RegisterActivity.this, "Registro realizado com sucesso", Toast.LENGTH_SHORT).show();
+
+                                    // Redirecionamento a MainActivity.java
+                                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(RegisterActivity.this, "Erro ao salvar permissão: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
 
                 } else {
                     Toast.makeText(RegisterActivity.this, "Erro no registro, verifique as informações.", Toast.LENGTH_SHORT).show();
