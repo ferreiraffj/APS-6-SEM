@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,7 +23,10 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.aps.pivc_biometric_app.adapter.ContentAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
@@ -39,9 +45,10 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private int userPermissionLevel;
-    private int nvlPermission;
-    private String userId; // Para armazenar o ID do documento do usuário
-    Button btnSairParaLogin;
+    Button btnSairParaLogin, btnAddContent;
+    private RecyclerView recyclerView;
+    private ContentAdapter adapter;
+    private List<DocumentSnapshot> contentList;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -55,24 +62,30 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Inicialização da toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Buscando instâncias do firebase
         mAuth=FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
 
+        // Buscando permissões do usuário logado
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         userPermissionLevel = sharedPreferences.getInt("permissionLevel", 1);
         Toast.makeText(this, "Nível de acesso: " + userPermissionLevel, Toast.LENGTH_SHORT).show();
 
-        btnSairParaLogin=findViewById(R.id.btnSairParaLogin);
-        btnSairParaLogin.setOnClickListener(view -> {
-            Toast.makeText(this, "Você escolheu sair", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(HomeActivity.this, MainActivity.class));
-        });
+        recyclerView = findViewById(R.id.recyclerViewContents);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        contentList = new ArrayList<>();
+        adapter = new ContentAdapter(this, contentList);
+        recyclerView.setAdapter(adapter);
+
+        // Carrega conteúdos do Firestore
+        loadContentsFromFirestore();
     }
 
-
+    // Configuraçãdo do menu da Toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -85,18 +98,36 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    // Acções para os itens de menu da toolbar
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.perfilToolbar){
-            Toast.makeText(this, "Perfil.", Toast.LENGTH_SHORT).show();
+        if (id == R.id.addContentToolbar){
+            startActivity(new Intent(HomeActivity.this, CreateContentActivity.class));
+            return true;
+        }
+        if (id == R.id.logoutToolbar){
+            performLogout();
+            return true;
         }
         if(id == R.id.editPermissionToolbar){
-            Toast.makeText(this, "Gerenciamento de permissões.", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(HomeActivity.this, ManageUserActivity.class));
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void performLogout(){
+        FirebaseAuth.getInstance().signOut();
+        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+        editor.remove("email");
+        editor.remove("password");
+        editor.putBoolean("isLogin", false);
+        editor.apply();
+
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        finish();
     }
 
     @Override
@@ -132,5 +163,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private boolean isToolbarVisible(){
         return toolbar.getVisibility() == View.VISIBLE;
+    }
+
+    private void loadContentsFromFirestore(){
+        db.collection("contents").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    contentList.clear();
+                    contentList.addAll(queryDocumentSnapshots.getDocuments());
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> Toast.makeText(HomeActivity.this, "Erro ao carregar conteúdos" + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    <item-->
+<!--        android:title="@string/searchtoolbarbutton"-->
+<!--        android:id="@+id/searchToolbar"-->
+<!--        android:icon="@drawable/baseline_search_24"-->
+<!--        app:actionViewClass="com.google.android.material.search.SearchView"-->
+<!--        app:showAsAction="ifRoom|collapseActionView"/>-->
+    <item
+        android:id="@+id/addContentToolbar"
+        android:icon="@drawable/baseline_add_24"
+        android:title="@string/itemAddContent"
+        app:showAsAction="ifRoom"/>
 
     <item
-        android:title="@string/searchtoolbarbutton"
-        android:id="@+id/searchToolbar"
-        android:icon="@drawable/baseline_search_24"
-        app:actionViewClass="com.google.android.material.search.SearchView"
-        app:showAsAction="ifRoom|collapseActionView"/>
+        android:id="@+id/logoutToolbar"
+        android:icon="@drawable/baseline_logout_24"
+        android:title="@string/logoutItem"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:title="@string/perfilToolbar"
@@ -15,6 +25,7 @@
 
     <item
         android:title="@string/gerenciarPermissoesToolbar"
-        android:id="@+id/editPermissionToolbar"/>
+        android:id="@+id/editPermissionToolbar"
+        android:visible="false"/>
 
 </menu>

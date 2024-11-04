@@ -21,4 +21,17 @@
     <string name="searchtoolbarbutton">searchToolbarButton</string>
     <string name="voltar_ao_menu">Voltar ao menu</string>
     <string name="btnSairParaLogin">Sair</string>
+    <string name="regInfoContent">Registro de informações</string>
+    <string name="descContent">Descrição</string>
+    <string name="nvlContent">Nível</string>
+    <string name="btnSalveContent">Salvar</string>
+    <string name="content">TextView</string>
+    <string name="showContent">Mostrar</string>
+    <string name="contentTitle">Título</string>
+    <string name="contentPreviewTitle">Prévia (1 Linha)</string>
+    <string name="contentPermissionLevel">Nível de permissão</string>
+    <string name="btnSaveContent">Salvar Conteúdo</string>
+    <string name="btnAddContent">Adicionar Conteúdo</string>
+    <string name="itemAddContent">Adicionar Conteúdo</string>
+    <string name="logoutItem">Logout</string>
 </resources>
