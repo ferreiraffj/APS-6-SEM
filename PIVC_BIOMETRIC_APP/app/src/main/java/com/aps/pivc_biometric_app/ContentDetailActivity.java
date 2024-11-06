@@ -24,6 +24,11 @@ public class ContentDetailActivity extends AppCompatActivity {
 
         TextView tvContent = findViewById(R.id.tvContent);
         String fullContent = getIntent().getStringExtra("fullContent");
+        if (fullContent != null) {
+            tvContent.setText(fullContent);
+        } else {
+            tvContent.setText("Conteúdo não disponível.");
+        }
 
         tvContent.setText(fullContent);
     }

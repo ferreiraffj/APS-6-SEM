@@ -30,6 +30,7 @@ import com.aps.pivc_biometric_app.adapter.ContentAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -80,6 +81,14 @@ public class HomeActivity extends AppCompatActivity {
         contentList = new ArrayList<>();
         adapter = new ContentAdapter(this, contentList);
         recyclerView.setAdapter(adapter);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Log.e("HomeActivity", "Usuário deslogado, redirecionando para MainActivity.");
+            startActivity(new Intent(HomeActivity.this, MainActivity.class));
+            finish();
+            return;
+        }
 
         // Carrega conteúdos do Firestore
         loadContentsFromFirestore();
@@ -166,10 +175,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadContentsFromFirestore(){
-        db.collection("contents").get()
+        db.collection("contents")
+                .whereLessThanOrEqualTo("permissionLevel", userPermissionLevel)
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     contentList.clear();
-                    contentList.addAll(queryDocumentSnapshots.getDocuments());
+
+                    for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                        int contentPermissionLevel = doc.getLong("permissionLevel").intValue();
+                        if (contentPermissionLevel <= userPermissionLevel){
+                            contentList.add(doc);
+                        }
+                    }
                     adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> Toast.makeText(HomeActivity.this, "Erro ao carregar conteúdos" + e.getMessage(), Toast.LENGTH_SHORT).show());

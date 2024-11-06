@@ -2,6 +2,7 @@ package com.aps.pivc_biometric_app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,13 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentV
         holder.tvTitle.setText(title);
         holder.tvPermissionLevel.setText("Nível " + permissionLevel);
         holder.tvPreview.setText(preview);
+
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int itemHeight = (int) (displayMetrics.heightPixels * 0.2); // 20% da altura da tela
+        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+        layoutParams.height = itemHeight;
+        holder.itemView.setLayoutParams(layoutParams);
+
 
         holder.itemView.setOnClickListener(v ->{
             Intent intent = new Intent(context, ContentDetailActivity.class);

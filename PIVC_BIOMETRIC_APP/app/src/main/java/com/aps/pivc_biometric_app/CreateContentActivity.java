@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class CreateContentActivity extends AppCompatActivity {
 
-    private EditText editTextTitle, editTextPreview, editTextPermissionLevel;
+    private EditText editTextTitle, editTextPreview, editTextPermissionLevel, editTextFullContent;
     private Button btnSaveContent;
     private FirebaseFirestore db;
 
@@ -39,6 +39,7 @@ public class CreateContentActivity extends AppCompatActivity {
         editTextTitle = findViewById(R.id.editTextTitle);
         editTextPreview = findViewById(R.id.editTextPreview);
         editTextPermissionLevel = findViewById(R.id.editTextPermissionLevel);
+        editTextFullContent = findViewById(R.id.editTextFullContent);
         btnSaveContent = findViewById(R.id.btnSaveContent);
 
         db = FirebaseFirestore.getInstance();
@@ -54,6 +55,7 @@ public class CreateContentActivity extends AppCompatActivity {
     private void saveContent(){
         String title = editTextTitle.getText().toString();
         String preview = editTextPreview.getText().toString();
+        String fullContent = editTextFullContent.getText().toString();
         int permissionLevel;
 
         try {
@@ -63,7 +65,7 @@ public class CreateContentActivity extends AppCompatActivity {
             return;
         }
 
-        if(title.isEmpty() || preview.isEmpty()){
+        if(title.isEmpty() || preview.isEmpty() || fullContent.isEmpty()){
             Toast.makeText(this, "Título e prévia são obrigatórios", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -73,6 +75,7 @@ public class CreateContentActivity extends AppCompatActivity {
         content.put("title", title);
         content.put("preview", preview);
         content.put("permissionLevel", permissionLevel);
+        content.put("fullContent", fullContent); // Adiciona o campo fullContent
 
         db.collection("contents")
                 .add(content)

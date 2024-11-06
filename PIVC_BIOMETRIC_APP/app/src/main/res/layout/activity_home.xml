@@ -23,13 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:dividerHeight="4dp"
-        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        android:dividerHeight="4dp"
+        android:scrollbars="vertical" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
