@@ -88,15 +88,3 @@ public class CreateContentActivity extends AppCompatActivity {
                 });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
