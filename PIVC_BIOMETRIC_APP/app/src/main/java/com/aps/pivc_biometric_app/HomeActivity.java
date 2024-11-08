@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -92,6 +93,34 @@ public class HomeActivity extends AppCompatActivity {
 
         // Carrega conteúdos do Firestore
         loadContentsFromFirestore();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                new AlertDialog.Builder(HomeActivity.this)
+                        .setTitle("Sair do app")
+                        .setMessage("Você deseja realmente sair?")
+                        .setPositiveButton("Sim", (dialog, which) ->{
+                            //Realiza o logout
+                            FirebaseAuth.getInstance().signOut();
+
+                            // Limpa as informações de login
+                            SharedPreferences.Editor editor = (SharedPreferences.Editor) getSharedPreferences("data", MODE_PRIVATE);
+                            editor.remove("email");
+                            editor.remove("password");
+                            editor.putBoolean("isLogin", false);
+                            editor.apply();
+
+                            // Redirecionamento a tela de login
+                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton("Não", null)
+                        .show();
+            }
+        });
     }
 
     // Configuraçãdo do menu da Toolbar
@@ -123,6 +152,10 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(HomeActivity.this, ManageUserActivity.class));
             finish();
         }
+        if(id == R.id.perfilToolbar){
+            startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -137,41 +170,6 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(HomeActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         finish();
-    }
-
-    @Override
-    public void onBackPressed(){
-        // Verificação de toolbar aberta
-        if(isToolbarVisible()){
-            new AlertDialog.Builder(this)
-                    .setTitle("Sair do app")
-                    .setMessage("Você deseja realmente sair?")
-                    .setPositiveButton("Sim", (dialog, which) ->{
-                        //Realiza o logout
-                        FirebaseAuth.getInstance().signOut();
-
-                        // Limpa as informações de login
-                        SharedPreferences.Editor editor = (SharedPreferences.Editor) getSharedPreferences("data", MODE_PRIVATE);
-                        editor.remove("email");
-                        editor.remove("password");
-                        editor.putBoolean("isLogin", false);
-                        editor.apply();
-
-                        // Redirecionamento a tela de login
-                        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                    })
-                    .setNegativeButton("Não", null)
-                    .show();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private boolean isToolbarVisible(){
-        return toolbar.getVisibility() == View.VISIBLE;
     }
 
     private void loadContentsFromFirestore(){
