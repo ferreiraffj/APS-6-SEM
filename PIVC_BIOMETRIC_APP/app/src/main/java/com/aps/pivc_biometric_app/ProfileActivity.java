@@ -25,7 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView tvProfileEmail, tvProfilePermissionLevel;
+    TextView tvProfileEmail, tvProfilePermissionLevel, tvName;
     FirebaseFirestore db;
     FirebaseAuth auth;
 
@@ -43,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         tvProfileEmail = findViewById(R.id.tvProfileEmail);
         tvProfilePermissionLevel = findViewById(R.id.tvProfilePermissionLevel);
+        tvName = findViewById(R.id.tvName);
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -55,9 +56,11 @@ public class ProfileActivity extends AppCompatActivity {
                   if(task.isSuccessful()){
                       DocumentSnapshot document = task.getResult();
                       if (document.exists()){
+                          String userName = document.getString("name");
                           String userEmail = document.getString("email");
                           int permissionLevel = document.getLong("permissionLevel").intValue();
 
+                          tvName.setText("Nome: " + userName);
                           tvProfileEmail.setText("Usuario: " + userEmail);
                           tvProfilePermissionLevel.setText("Nível de acesso: " + String.valueOf(permissionLevel));
                       } else {

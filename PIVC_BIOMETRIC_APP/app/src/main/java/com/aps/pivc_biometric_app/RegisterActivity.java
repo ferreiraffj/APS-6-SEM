@@ -2,6 +2,7 @@ package com.aps.pivc_biometric_app;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,12 +33,13 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText inputEmailRegister, inputPasswordRegister;
+    private EditText inputEmailRegister, inputPasswordRegister, inputNameRegister;
     private Button btnRegister;
     private FirebaseAuth mAuth;
     SharedPreferences sharedPreferences;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         // Atualizando as referências para os IDs corretos do XML
         inputEmailRegister = findViewById(R.id.inputEmailRegister);
         inputPasswordRegister = findViewById(R.id.inputPasswordRegister);
+        inputNameRegister = findViewById(R.id.inputNameRegister);
         btnRegister = findViewById(R.id.btnRegister);
 
         mAuth = FirebaseAuth.getInstance();
@@ -60,11 +63,18 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(view -> {
             String email = inputEmailRegister.getText().toString();
             String password = inputPasswordRegister.getText().toString();
-            registerUser(email, password);
+            String name = inputNameRegister.getText().toString();
+
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Por favor, insira seu nome.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            registerUser(email, password, name);
         });
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(String email, String password, String name) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -80,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                         // Criando um novo usuário com email e nível de permissão
                         Map<String, Object> user = new HashMap<>();
                         user.put("email", email);
+                        user.put("name", name);
                         user.put("permissionLevel", 1); //Nível de permissão padrão
 
 

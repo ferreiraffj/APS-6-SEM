@@ -8,6 +8,19 @@
     tools:context=".RegisterActivity">
 
     <EditText
+        android:id="@+id/inputNameRegister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/nameRegister"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/inputEmailRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.821" />
+
+    <EditText
         android:id="@+id/inputEmailRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

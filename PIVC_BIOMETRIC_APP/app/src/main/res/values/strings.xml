@@ -35,4 +35,5 @@
     <string name="itemAddContent">Adicionar Conteúdo</string>
     <string name="logoutItem">Logout</string>
     <string name="editTextFullContent">Conteúdo Completo</string>
+    <string name="nameRegister">Nome</string>
 </resources>
