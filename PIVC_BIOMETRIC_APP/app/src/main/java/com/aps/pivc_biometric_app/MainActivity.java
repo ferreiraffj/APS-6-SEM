@@ -196,9 +196,9 @@ public class MainActivity extends AppCompatActivity {
                                                     editor.putBoolean("isLogin", true);
                                                     editor.apply();
 
-                                                    Toast.makeText(MainActivity.this,
-                                                            "Nível de permissão: " + permissionLevel,
-                                                            Toast.LENGTH_SHORT).show();
+//                                                    Toast.makeText(MainActivity.this,
+//                                                            "Nível de permissão: " + permissionLevel,
+//                                                            Toast.LENGTH_SHORT).show();
 
                                                     imageViewLogin.setVisibility(View.VISIBLE);
                                                     startActivity(new Intent(MainActivity.this, HomeActivity.class));

@@ -41,7 +41,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentV
         holder.tvPreview.setText(preview);
 
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int itemHeight = (int) (displayMetrics.heightPixels * 0.1); // 20% da altura da tela
+        int itemHeight = (int) (displayMetrics.heightPixels * 0.12); // 20% da altura da tela
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         layoutParams.height = itemHeight;
         holder.itemView.setLayoutParams(layoutParams);

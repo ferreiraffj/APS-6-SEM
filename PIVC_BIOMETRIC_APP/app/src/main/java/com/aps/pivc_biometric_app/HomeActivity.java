@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
         // Buscando permissões do usuário logado
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         userPermissionLevel = sharedPreferences.getInt("permissionLevel", 1);
-        Toast.makeText(this, "Nível de acesso: " + userPermissionLevel, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Nível de acesso: " + userPermissionLevel, Toast.LENGTH_SHORT).show();
 
         recyclerView = findViewById(R.id.recyclerViewContents);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -132,7 +132,12 @@ public class HomeActivity extends AppCompatActivity {
         if(editPermissionItem != null){
             editPermissionItem.setVisible(userPermissionLevel == 4);
         }
-        Toast.makeText(this, "Nível de permissão: " + userPermissionLevel, Toast.LENGTH_SHORT).show();
+
+        MenuItem addContentItem = menu.findItem(R.id.addContentToolbar);
+        if (addContentItem != null){
+            addContentItem.setVisible(userPermissionLevel >= 3);
+        }
+//        Toast.makeText(this, "Nível de permissão: " + userPermissionLevel, Toast.LENGTH_SHORT).show();
         return true;
     }
 

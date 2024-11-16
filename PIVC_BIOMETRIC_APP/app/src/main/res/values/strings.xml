@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PIVC_BIOMETRIC_APP</string>
+    <string name="app_name">APS - MMA APP</string>
     <string name="login_using_fingerprint">Entrar com a impressão digital</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="home">Home</string>
